@@ -1,0 +1,11 @@
+{
+  "files": {
+    "main.js": "/human/static/js/main.eb71011f.js",
+    "static/media/bgi.png": "/human/static/media/bgi.2d25d10de4478c25d4c1.png",
+    "index.html": "/human/index.html",
+    "main.eb71011f.js.map": "/human/static/js/main.eb71011f.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.eb71011f.js"
+  ]
+}
