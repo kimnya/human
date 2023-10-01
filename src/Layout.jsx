@@ -4,6 +4,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import title from "./asset/title.png";
 import title2 from "./asset/title2.png";
 import HumanCtxprovider, { CtxState } from "./context/HumanCtxprovider";
+import Home from "./pages/Home";
 
 const GlobalStyle = createGlobalStyle`
 
@@ -372,7 +373,7 @@ const Layout = () => {
 
   const searchOutFn = () => {
     setShop(!search);
-    console.log(search);
+    alert(search);
   };
 
   return (
@@ -448,7 +449,7 @@ const Layout = () => {
 
           <Menu>
             <i class="fas fa-search" onClick={searchFn}>
-              <Search className={search ? "on" : ""}>
+              <Search className={search ? "on" : "off"}>
                 <div className="searchBox">
                   <input type="text" />
                   <i class="fas fa-search"></i>
@@ -467,6 +468,7 @@ const Layout = () => {
           <Shadow className={search ? "on" : ""} />
           <Outlet />
         </Section>
+
         <Footer>
           <SubNav className="footNav">
             <LnbContainer>

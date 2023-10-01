@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import bgi from "./../asset/bgi.png";
+import ItemList from "../components/ItemList";
 
 const Bgi = styled.div`
   width: 99vw;
@@ -12,7 +13,12 @@ const Bgi = styled.div`
 `;
 
 const Home = () => {
-  return <Bgi></Bgi>;
+  return (
+    <>
+      <Bgi></Bgi>
+      <ItemList />
+    </>
+  );
 };
 
 export default Home;

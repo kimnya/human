@@ -1,7 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
 
-const All = () => {
-  return <div></div>;
-};
+const All = () => {};
 
 export default All;
