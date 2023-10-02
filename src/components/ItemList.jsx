@@ -1,26 +1,28 @@
 import React, { useContext } from "react";
 import styled from "styled-components";
 import { CtxState } from "../context/HumanCtxprovider";
+import { Link } from "react-router-dom";
 
 const List = styled.ul`
   display: flex;
   justify-content: center;
   width: 100%;
+  margin-top: 10px;
 `;
 
-const Item = styled.li`
-  border: 1px solid gold;
-`;
+const Item = styled.li``;
 
 const Items = ({ item }) => {
-  const { name, img, price } = item;
+  const { name, img, price, id } = item;
   return (
     <Item>
-      <img src={img} alt={name} />
-      <p>
-        <span>{name}</span>
-      </p>
-      <span>${price}</span>
+      <Link to={`/products/${id - 1}`}>
+        <img src={img} alt={name} />
+        <p>
+          <span>{name}</span>
+        </p>
+        <span>${price}</span>
+      </Link>
     </Item>
   );
 };

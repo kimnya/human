@@ -286,7 +286,6 @@ const Section = styled.section`
   position: relative;
   width: 100vw;
   height: 1600px;
-  border: 1px solid gold;
 `;
 
 const Shadow = styled.div`
