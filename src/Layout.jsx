@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import styled, { createGlobalStyle } from "styled-components";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import title from "./asset/title.png";
 import title2 from "./asset/title2.png";
 import HumanCtxprovider, { CtxState } from "./context/HumanCtxprovider";
@@ -285,7 +285,7 @@ const Search = styled(SubNav)`
 const Section = styled.section`
   position: relative;
   width: 100vw;
-  height: 1600px;
+  min-height: 800px;
 `;
 
 const Shadow = styled.div`
@@ -353,6 +353,7 @@ const SecondLogo = styled.div`
 `;
 
 const Layout = () => {
+  const navigate = useNavigate();
   const state = useContext(CtxState);
 
   const [shop, setShop] = useState(state);
@@ -375,20 +376,27 @@ const Layout = () => {
     alert(search);
   };
 
+  const loginFn = () => {
+    navigate("/account/login");
+  };
+
+  const homeFn = () => {
+    navigate("/");
+  };
   return (
     <>
       <GlobalStyle />
       <HumanCtxprovider>
         <Header>
           <User>
-            <i class="far fa-user"></i>
+            <i class="far fa-user" onClick={loginFn}></i>
             <Selection>
               <option>한국어</option>
               <option>English</option>
               <option>일본어</option>
             </Selection>
           </User>
-          <Logo src={title}></Logo>
+          <Logo onClick={homeFn} src={title}></Logo>
 
           <Nav>
             <NavLink onMouseOver={shopFn} onMouseOut={shopOutFn}>

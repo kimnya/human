@@ -12,12 +12,43 @@ const List = styled.ul`
 
 const Item = styled.li``;
 
+const ImgBox = styled.div`
+  position: relative;
+  width: 380px;
+  height: 380px;
+  &:hover > div {
+    display: block;
+  }
+  &:hover > img {
+    transform: scale(1.05);
+  }
+`;
+const Shadow = styled.div`
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100;
+  background-color: #000;
+  opacity: 20%;
+`;
+const Img = styled.img`
+  transition: all 0.3s;
+`;
 const Items = ({ item }) => {
   const { name, img, price, id } = item;
   return (
     <Item>
       <Link to={`/products/${id - 1}`}>
-        <img src={img} alt={name} />
+        <ImgBox>
+          <Shadow />
+          <Img src={img} alt={name} />
+        </ImgBox>
+
         <p>
           <span>{name}</span>
         </p>
