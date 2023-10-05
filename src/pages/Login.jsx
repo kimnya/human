@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { CtxState } from '../context/HumanCtxprovider';
+import HumanCtxprovider, { CtxDispatch, CtxState } from '../context/HumanCtxprovider';
 
 const LoginContainer = styled.div`
 	display: flex;
@@ -51,10 +51,15 @@ const LoginButton = styled.button`
 
 const Login = () => {
 	const state = useContext(CtxState);
+	const dispatch = useContext(CtxDispatch);
 	const storage = JSON.parse(localStorage['human']);
-	const navgate = useNavigate();
+	const navigate = useNavigate();
 
-	const [input, setInput] = useState(state, {
+	// const { isLogin } = state;
+
+	const [login, setLogin] = useState(state);
+
+	const [input, setInput] = useState({
 		logEmail: '',
 		logPsw: '',
 	});
@@ -71,46 +76,54 @@ const Login = () => {
 
 	const LoginFn = (evt) => {
 		evt.preventDefault();
+		{
+			console.log('state=' + state);
+		}
 		if (storage.regiEmail === logEmail && storage.regiPsw === logPsw) {
-			// const { isLogin } = input;
-			setInput((prev) => ({
-				...prev,
-				isLogin: !prev.state.isLogin,
-			}));
-			navgate('/');
-			// alert('성공');
+			// setLogin((prev) => ({
+			// 	...prev,
+			// 	isLogin: !state.isLogin,
+			// }));
+			dispatch({ type: 'LOGIN' });
+			console.log(localStorage['human']);
+			setTimeout(() => {
+				console.log(login.isLogin);
+			}, 1000);
+			navigate('/');
 		} else alert('아이디 또는 비밀번호가 잘못 입력 되었습니다. ');
 	};
 	return (
 		<>
-			<LoginContainer>
-				<Title>Login</Title>
-				<Form onSubmit={LoginFn}>
-					<Label htmlFor="logEmail">
-						<Email
-							value={logEmail}
-							onChange={ChangeFn}
-							name="logEmail"
-							id="logEmail"
-							placeholder="Your email address"
-							autoFocus
-						/>
-					</Label>
-					<Label htmlFor="logPsw">
-						<Password
-							type="password"
-							value={logPsw}
-							onChange={ChangeFn}
-							name="logPsw"
-							id="logPsw"
-							placeholder="Your password"
-						/>
-					</Label>
-					<LoginButton>Login</LoginButton>
-				</Form>
-				<Link>Forgot your password?</Link>
-				<Link to={'/account/register'}>Create an account</Link>
-			</LoginContainer>
+			<HumanCtxprovider>
+				<LoginContainer>
+					<Title>Login</Title>
+					<Form onSubmit={LoginFn}>
+						<Label htmlFor="logEmail">
+							<Email
+								value={logEmail}
+								onChange={ChangeFn}
+								name="logEmail"
+								id="logEmail"
+								placeholder="Your email address"
+								autoFocus
+							/>
+						</Label>
+						<Label htmlFor="logPsw">
+							<Password
+								type="password"
+								value={logPsw}
+								onChange={ChangeFn}
+								name="logPsw"
+								id="logPsw"
+								placeholder="Your password"
+							/>
+						</Label>
+						<LoginButton>Login</LoginButton>
+					</Form>
+					<Link>Forgot your password?</Link>
+					<Link to={'/account/register'}>Create an account</Link>
+				</LoginContainer>
+			</HumanCtxprovider>
 		</>
 	);
 };

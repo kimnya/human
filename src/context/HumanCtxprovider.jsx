@@ -1,5 +1,4 @@
 import React, { createContext, useReducer } from 'react';
-import Home from '../pages/Home';
 
 const initialData = {
 	show: false,
@@ -36,17 +35,32 @@ const initialData = {
 			price: '320,000원',
 		},
 	],
+	login: [],
+};
+export const CtxState = createContext(initialData);
+export const CtxDispatch = createContext(null);
+
+const reducer = (state, action) => {
+	switch (action.type) {
+		case 'LOGIN':
+			return { ...state, isLogin: !state.isLogin };
+
+		default:
+			return state;
+	}
 };
 
-export const CtxState = createContext(initialData);
-
 const HumanCtxprovider = ({ children }) => {
-	const reducer = () => {};
 	const [state, dispatch] = useReducer(reducer, initialData);
+	{
+		console.log('ctx=' + state.isLogin);
+	}
 
 	return (
 		<>
-			<CtxState.Provider value={state}>{children}</CtxState.Provider>
+			<CtxDispatch.Provider value={dispatch}>
+				<CtxState.Provider value={state}>{children}</CtxState.Provider>
+			</CtxDispatch.Provider>
 		</>
 	);
 };

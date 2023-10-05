@@ -5,6 +5,7 @@ import title from './asset/title.png';
 import title2 from './asset/title2.png';
 import HumanCtxprovider, { CtxState } from './context/HumanCtxprovider';
 import Home from './pages/Home';
+import { useEffect } from 'react';
 
 const GlobalStyle = createGlobalStyle`
 
@@ -243,6 +244,18 @@ const User = styled.div`
 		margin: 20px;
 		font-size: 22px;
 	}
+	> p {
+		display: none;
+		> span {
+			letter-spacing: 2px;
+			font-weight: bold;
+			font-size: 16px;
+			text-decoration: underline;
+		}
+		&.ment {
+			display: block;
+		}
+	}
 `;
 const Menu = styled.p`
 	> i {
@@ -356,9 +369,9 @@ const Layout = () => {
 	const storage = JSON.parse(localStorage['human']);
 	const navigate = useNavigate();
 	const state = useContext(CtxState);
-
 	const [shop, setShop] = useState(state);
 	const { show, search } = shop;
+	const { isLogin } = state;
 
 	const shopFn = () => {
 		setShop((prev) => ({ ...prev, show: !state.show }));
@@ -387,181 +400,100 @@ const Layout = () => {
 	const homeFn = () => {
 		navigate('/');
 	};
+	{
+		console.log('login=' + state.isLogin);
+	}
 	return (
 		<>
 			<GlobalStyle />
 			<HumanCtxprovider>
-				{state.isLogin ? (
-					<Header>
-						<User>
-							<i class="far fa-user" onClick={myPageFn}></i>
-							<Selection>
-								<option>한국어</option>
-								<option>English</option>
-								<option>일본어</option>
-							</Selection>
-						</User>
-						<Logo onClick={homeFn} src={title}></Logo>
+				<Header>
+					<User>
+						<p className={isLogin ? 'ment' : ''}>
+							안녕하세요 {storage.fName}님 좋은 하루 보내세요.{' '}
+						</p>
+						<i class="far fa-user" onClick={isLogin ? myPageFn : loginFn}></i>
+						<Selection>
+							<option>한국어</option>
+							<option>English</option>
+							<option>일본어</option>
+						</Selection>
+					</User>
 
-						<Nav>
-							<NavLink onMouseOver={shopFn} onMouseOut={shopOutFn}>
-								SHOP
-								<SubNav className={show ? 'show' : ''}>
-									<LnbContainer>
-										<Lnb>
-											<li>
-												{' '}
-												<NavLink to={`/collections/all`}>모든아이템</NavLink>
-											</li>
+					<Logo onClick={homeFn} src={title}></Logo>
 
-											<li>
-												{' '}
-												<NavLink>신상품</NavLink>
-											</li>
+					<Nav>
+						<NavLink onMouseOver={shopFn} onMouseOut={shopOutFn}>
+							SHOP
+							<SubNav className={show ? 'show' : ''}>
+								<LnbContainer>
+									<Lnb>
+										<li>
+											{' '}
+											<NavLink to={`/collections/all`}>모든아이템</NavLink>
+										</li>
 
-											<li>아우터</li>
+										<li>
+											{' '}
+											<NavLink>신상품</NavLink>
+										</li>
 
-											<li>셔츠</li>
+										<li>아우터</li>
 
-											<li>티셔츠</li>
+										<li>셔츠</li>
 
-											<li>니트 커트소</li>
-										</Lnb>
-										<Lnb>
-											<li>
-												{' '}
-												<NavLink>하의</NavLink>
-											</li>
+										<li>티셔츠</li>
 
-											<li>신발</li>
+										<li>니트 커트소</li>
+									</Lnb>
+									<Lnb>
+										<li>
+											{' '}
+											<NavLink>하의</NavLink>
+										</li>
 
-											<li>모자</li>
+										<li>신발</li>
 
-											<li>가방 & 파우치</li>
+										<li>모자</li>
 
-											<li>엑세서리</li>
+										<li>가방 & 파우치</li>
 
-											<li>이너웨어</li>
-										</Lnb>
-										<Lnb>
-											<li>홈 & 라이프 스타일</li>
+										<li>엑세서리</li>
 
-											<li>협업 아이템</li>
+										<li>이너웨어</li>
+									</Lnb>
+									<Lnb>
+										<li>홈 & 라이프 스타일</li>
 
-											<li>Wasted Youth</li>
+										<li>협업 아이템</li>
 
-											<li>CACTUS PLANT FLEA MARKET</li>
-										</Lnb>
-									</LnbContainer>
-								</SubNav>
-							</NavLink>
-							<NavLink to={`/news`}>NEWS</NavLink>
-							<NavLink to={`/about`}>ABOUT</NavLink>
-						</Nav>
+										<li>Wasted Youth</li>
 
-						<Menu>
-							<p>안녕하세요 {storage.fName}님 좋은 하루 보내세요. </p>
-							<i class="fas fa-search" onClick={searchFn}>
-								<Search className={search ? 'on' : 'off'}>
-									<div className="searchBox">
-										<input type="text" />
-										<i class="fas fa-search"></i>
-										<i class="fas fa-times" onClick={searchOutFn}></i>
-									</div>
-								</Search>
-							</i>
+										<li>CACTUS PLANT FLEA MARKET</li>
+									</Lnb>
+								</LnbContainer>
+							</SubNav>
+						</NavLink>
+						<NavLink to={`/news`}>NEWS</NavLink>
+						<NavLink to={`/about`}>ABOUT</NavLink>
+					</Nav>
 
-							<i class="fas fa-shopping-bag"></i>
+					<Menu>
+						<i class="fas fa-search" onClick={searchFn}>
+							<Search className={search ? 'on' : 'off'}>
+								<div className="searchBox">
+									<input type="text" />
+									<i class="fas fa-search"></i>
+									<i class="fas fa-times" onClick={searchOutFn}></i>
+								</div>
+							</Search>
+						</i>
 
-							<i class="fas fa-bars"></i>
-						</Menu>
-					</Header>
-				) : (
-					<Header>
-						<User>
-							<i class="far fa-user" onClick={loginFn}></i>
-							<Selection>
-								<option>한국어</option>
-								<option>English</option>
-								<option>일본어</option>
-							</Selection>
-						</User>
-						<Logo onClick={homeFn} src={title}></Logo>
+						<i class="fas fa-shopping-bag"></i>
 
-						<Nav>
-							<NavLink onMouseOver={shopFn} onMouseOut={shopOutFn}>
-								SHOP
-								<SubNav className={show ? 'show' : ''}>
-									<LnbContainer>
-										<Lnb>
-											<li>
-												{' '}
-												<NavLink to={`/collections/all`}>모든아이템</NavLink>
-											</li>
-
-											<li>
-												{' '}
-												<NavLink>신상품</NavLink>
-											</li>
-
-											<li>아우터</li>
-
-											<li>셔츠</li>
-
-											<li>티셔츠</li>
-
-											<li>니트 커트소</li>
-										</Lnb>
-										<Lnb>
-											<li>
-												{' '}
-												<NavLink>하의</NavLink>
-											</li>
-
-											<li>신발</li>
-
-											<li>모자</li>
-
-											<li>가방 & 파우치</li>
-
-											<li>엑세서리</li>
-
-											<li>이너웨어</li>
-										</Lnb>
-										<Lnb>
-											<li>홈 & 라이프 스타일</li>
-
-											<li>협업 아이템</li>
-
-											<li>Wasted Youth</li>
-
-											<li>CACTUS PLANT FLEA MARKET</li>
-										</Lnb>
-									</LnbContainer>
-								</SubNav>
-							</NavLink>
-							<NavLink to={`/news`}>NEWS</NavLink>
-							<NavLink to={`/about`}>ABOUT</NavLink>
-						</Nav>
-
-						<Menu>
-							{/* <p>안녕하세요 {storage.fName}님 좋은 하루 보내세요. </p> */}
-							<i class="fas fa-search" onClick={searchFn}>
-								<Search className={search ? 'on' : 'off'}>
-									<div className="searchBox">
-										<input type="text" />
-										<i class="fas fa-search"></i>
-										<i class="fas fa-times" onClick={searchOutFn}></i>
-									</div>
-								</Search>
-							</i>
-
-							<i class="fas fa-shopping-bag"></i>
-
-							<i class="fas fa-bars"></i>
-						</Menu>
-					</Header>
-				)}
+						<i class="fas fa-bars"></i>
+					</Menu>
+				</Header>
 
 				<Section>
 					<Shadow className={search ? 'on' : ''} />

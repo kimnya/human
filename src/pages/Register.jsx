@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { CtxState } from '../context/HumanCtxprovider';
 
 const LoginContainer = styled.div`
 	display: flex;
@@ -47,6 +49,7 @@ const RegisterButton = styled.button`
 		background: #999;
 	}
 `;
+
 const LastName = styled(FirstName)``;
 const Email = styled(FirstName)``;
 const Password = styled(FirstName)``;
@@ -213,9 +216,10 @@ const Register = () => {
 	const submitFn = (evt) => {
 		evt.preventDefault();
 
-		if (isFname) {
+		if (isFname && isLname && isRegiEmail && isRegiPsw) {
 			localStorage['human'] = JSON.stringify(input);
 			navigate('/account/login');
+			console.log(localStorage['human']);
 		} else {
 			alert('입력한 값을 다시 한번 체크해 주세요 ');
 		}
