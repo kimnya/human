@@ -35,7 +35,6 @@ const initialData = {
 			price: '320,000원',
 		},
 	],
-	login: [],
 };
 export const CtxState = createContext(initialData);
 export const CtxDispatch = createContext(null);
@@ -52,9 +51,6 @@ const reducer = (state, action) => {
 
 const HumanCtxprovider = ({ children }) => {
 	const [state, dispatch] = useReducer(reducer, initialData);
-	{
-		console.log('ctx=' + state.isLogin);
-	}
 
 	return (
 		<>
