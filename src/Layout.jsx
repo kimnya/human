@@ -373,6 +373,7 @@ const Layout = () => {
 	const { show, search } = shop;
 
 	// const { isLogin } = state;
+
 	const storage = JSON.parse(localStorage['human'] || JSON.stringify(state));
 
 	const shopFn = () => {
@@ -409,178 +410,179 @@ const Layout = () => {
 	return (
 		<>
 			<GlobalStyle />
+			<HumanCtxprovider>
+				<Header>
+					<User>
+						<p className={state.isLogin ? 'ment' : ''}>
+							안녕하세요 {storage.fName}님 좋은 하루 보내세요.{' '}
+						</p>
+						<i class="far fa-user" onClick={state.isLogin ? myPageFn : loginFn}></i>
+						<Selection>
+							<option>한국어</option>
+							<option>English</option>
+							<option>일본어</option>
+						</Selection>
+					</User>
 
-			<Header>
-				<User>
-					<p className={state.isLogin ? 'ment' : ''}>
-						안녕하세요 {storage.fName}님 좋은 하루 보내세요.{' '}
-					</p>
-					<i class="far fa-user" onClick={state.isLogin ? myPageFn : loginFn}></i>
-					<Selection>
-						<option>한국어</option>
-						<option>English</option>
-						<option>일본어</option>
-					</Selection>
-				</User>
+					<Logo onClick={homeFn} src={title}></Logo>
 
-				<Logo onClick={homeFn} src={title}></Logo>
+					<Nav>
+						<NavLink onMouseOver={shopFn} onMouseOut={shopOutFn}>
+							SHOP
+							<SubNav className={show ? 'show' : ''}>
+								<LnbContainer>
+									<Lnb>
+										<li>
+											{' '}
+											<NavLink to={`/collections/all`}>모든아이템</NavLink>
+										</li>
 
-				<Nav>
-					<NavLink onMouseOver={shopFn} onMouseOut={shopOutFn}>
-						SHOP
-						<SubNav className={show ? 'show' : ''}>
-							<LnbContainer>
-								<Lnb>
-									<li>
-										{' '}
-										<NavLink to={`/collections/all`}>모든아이템</NavLink>
-									</li>
+										<li>
+											{' '}
+											<NavLink>신상품</NavLink>
+										</li>
 
-									<li>
-										{' '}
-										<NavLink>신상품</NavLink>
-									</li>
+										<li>아우터</li>
 
-									<li>아우터</li>
+										<li>셔츠</li>
 
-									<li>셔츠</li>
+										<li>티셔츠</li>
 
-									<li>티셔츠</li>
+										<li>니트 커트소</li>
+									</Lnb>
+									<Lnb>
+										<li>
+											{' '}
+											<NavLink>하의</NavLink>
+										</li>
 
-									<li>니트 커트소</li>
-								</Lnb>
-								<Lnb>
-									<li>
-										{' '}
-										<NavLink>하의</NavLink>
-									</li>
+										<li>신발</li>
 
-									<li>신발</li>
+										<li>모자</li>
 
-									<li>모자</li>
+										<li>가방 & 파우치</li>
 
-									<li>가방 & 파우치</li>
+										<li>엑세서리</li>
 
-									<li>엑세서리</li>
+										<li>이너웨어</li>
+									</Lnb>
+									<Lnb>
+										<li>홈 & 라이프 스타일</li>
 
-									<li>이너웨어</li>
-								</Lnb>
-								<Lnb>
-									<li>홈 & 라이프 스타일</li>
+										<li>협업 아이템</li>
 
-									<li>협업 아이템</li>
+										<li>Wasted Youth</li>
 
-									<li>Wasted Youth</li>
+										<li>CACTUS PLANT FLEA MARKET</li>
+									</Lnb>
+								</LnbContainer>
+							</SubNav>
+						</NavLink>
+						<NavLink to={`/news`}>NEWS</NavLink>
+						<NavLink to={`/about`}>ABOUT</NavLink>
+					</Nav>
 
-									<li>CACTUS PLANT FLEA MARKET</li>
-								</Lnb>
-							</LnbContainer>
-						</SubNav>
-					</NavLink>
-					<NavLink to={`/news`}>NEWS</NavLink>
-					<NavLink to={`/about`}>ABOUT</NavLink>
-				</Nav>
+					<Menu>
+						<i class="fas fa-search" onClick={searchFn}>
+							<Search className={search ? 'on' : 'off'}>
+								<div className="searchBox">
+									<input type="text" />
+									<i class="fas fa-search"></i>
+									<i class="fas fa-times" onClick={searchOutFn}></i>
+								</div>
+							</Search>
+						</i>
 
-				<Menu>
-					<i class="fas fa-search" onClick={searchFn}>
-						<Search className={search ? 'on' : 'off'}>
-							<div className="searchBox">
-								<input type="text" />
-								<i class="fas fa-search"></i>
-								<i class="fas fa-times" onClick={searchOutFn}></i>
-							</div>
-						</Search>
-					</i>
+						<i class="fas fa-shopping-bag"></i>
 
-					<i class="fas fa-shopping-bag"></i>
+						<i class="fas fa-bars"></i>
+					</Menu>
+				</Header>
 
-					<i class="fas fa-bars"></i>
-				</Menu>
-			</Header>
+				<Section>
+					<Shadow className={search ? 'on' : ''} />
+					<Outlet />
+				</Section>
 
-			<Section>
-				<Shadow className={search ? 'on' : ''} />
-				<Outlet />
-			</Section>
+				<Footer>
+					<SubNav className="footNav">
+						<LnbContainer>
+							<Lnb>
+								<li>모든아이템</li>
 
-			<Footer>
-				<SubNav className="footNav">
-					<LnbContainer>
-						<Lnb>
-							<li>모든아이템</li>
+								<li>신상품</li>
 
-							<li>신상품</li>
+								<li>아우터</li>
 
-							<li>아우터</li>
+								<li>셔츠</li>
 
-							<li>셔츠</li>
+								<li>티셔츠</li>
 
-							<li>티셔츠</li>
+								<li>니트 커트소</li>
+							</Lnb>
+							<Lnb>
+								<li>하의</li>
 
-							<li>니트 커트소</li>
-						</Lnb>
-						<Lnb>
-							<li>하의</li>
+								<li>신발</li>
 
-							<li>신발</li>
+								<li>모자</li>
 
-							<li>모자</li>
+								<li>가방 & 파우치</li>
 
-							<li>가방 & 파우치</li>
+								<li>엑세서리</li>
 
-							<li>엑세서리</li>
+								<li>이너웨어</li>
+							</Lnb>
+							<Lnb>
+								<li>홈 & 라이프 스타일</li>
 
-							<li>이너웨어</li>
-						</Lnb>
-						<Lnb>
-							<li>홈 & 라이프 스타일</li>
+								<li>협업 아이템</li>
 
-							<li>협업 아이템</li>
+								<li>Wasted Youth</li>
 
-							<li>Wasted Youth</li>
+								<li>CACTUS PLANT FLEA MARKET</li>
+							</Lnb>
+						</LnbContainer>
+					</SubNav>
+					<SubNav className="ect">
+						<LnbContainer>
+							<Lnb>
+								<li>뉴스레터 등록</li>
 
-							<li>CACTUS PLANT FLEA MARKET</li>
-						</Lnb>
-					</LnbContainer>
-				</SubNav>
-				<SubNav className="ect">
-					<LnbContainer>
-						<Lnb>
-							<li>뉴스레터 등록</li>
+								<li>HUMAN MADE 취급점포</li>
 
-							<li>HUMAN MADE 취급점포</li>
+								<li>이용약관</li>
 
-							<li>이용약관</li>
+								<li>
+									배송지 :
+									<Selection>
+										<option>대한민국</option>
+										<option>일본</option>
+										<option>중국</option>
+									</Selection>
+								</li>
+							</Lnb>
+							<Lnb>
+								<li>배송방법 *우송료에 대해</li>
 
-							<li>
-								배송지 :
-								<Selection>
-									<option>대한민국</option>
-									<option>일본</option>
-									<option>중국</option>
-								</Selection>
-							</li>
-						</Lnb>
-						<Lnb>
-							<li>배송방법 *우송료에 대해</li>
+								<li>지불방법에 대해</li>
 
-							<li>지불방법에 대해</li>
+								<li>개인정보취급방침</li>
 
-							<li>개인정보취급방침</li>
+								<li>위조품*모방품 방지 대책에 관하여 </li>
+							</Lnb>
+							<Lnb>
+								<li>FAQ</li>
 
-							<li>위조품*모방품 방지 대책에 관하여 </li>
-						</Lnb>
-						<Lnb>
-							<li>FAQ</li>
+								<li>각종문의</li>
 
-							<li>각종문의</li>
-
-							<li>특정 상거래법에 근거한 표기 </li>
-						</Lnb>
-					</LnbContainer>
-				</SubNav>
-				<SecondLogo className="logo" />
-			</Footer>
+								<li>특정 상거래법에 근거한 표기 </li>
+							</Lnb>
+						</LnbContainer>
+					</SubNav>
+					<SecondLogo className="logo" />
+				</Footer>
+			</HumanCtxprovider>
 		</>
 	);
 };

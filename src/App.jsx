@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Account from './pages/Account';
 import HumanCtxprovider from './context/HumanCtxprovider';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
 	// 정규표현식 공부하게 됌
@@ -18,10 +19,18 @@ function App() {
 	// 레이아웃 컴포넌트 안에 HumanCtxprovider를 넣어서 state가 안가져와지나? 하고 App에 있던 라우츠 옮기고 <Layout/> 넣고 감싸줬는데도 해결안됌.. Provider문제는 아닌였던걸로
 	return (
 		<>
-			<Router />;
-			<HumanCtxprovider>
-				<Layout />
-			</HumanCtxprovider>
+			<Routes>
+				<Route path={`/`} element={<Layout />}>
+					<Route index element={<Home />} />
+					<Route path="news" element={<News />} />
+					<Route path="about" element={<About />} />
+					<Route path="/account/" element={<Account />} />
+					<Route path="/account/login" element={<Login />} />
+					<Route path="/account/register" element={<Register />} />
+					<Route path="/collections/all" element={<All />} />
+					<Route path="/products/:id" element={<Products />} />
+				</Route>
+			</Routes>
 		</>
 	);
 }

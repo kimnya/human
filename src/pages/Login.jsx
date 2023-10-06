@@ -52,7 +52,7 @@ const LoginButton = styled.button`
 const Login = () => {
 	const state = useContext(CtxState);
 	const dispatch = useContext(CtxDispatch);
-	const storage = JSON.parse(localStorage['human']);
+	const storage = JSON.parse(localStorage['human'] || JSON.stringify(state));
 	const navigate = useNavigate();
 
 	// const { isLogin } = state;
