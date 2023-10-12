@@ -7,7 +7,7 @@ const SubNav = styled.div`
   display: none;
   position: absolute;
   left: 50%;
-  top: -9999px;
+  top: 0;
   width: 99vw;
   height: 300px;
   background-color: #fff;
@@ -16,7 +16,11 @@ const SubNav = styled.div`
   &.show {
     display: block;
     top: 20px;
-    z-index: 100;
+    z-index: 300;
+  }
+  &.footNav {
+    display: block;
+    top: 0;
   }
 `;
 
@@ -45,15 +49,22 @@ const Lnb = styled.ul`
   }
 `;
 
-const Menu = ({ name }) => {
+const Menu = ({ name, show, setShop }) => {
   return (
     <li>
-      <NavLink>{name}</NavLink>
+      <NavLink
+        onClick={() => {
+          setShop(!show);
+        }}
+        to={`/collections/all`}
+      >
+        {name}
+      </NavLink>
     </li>
   );
 };
 
-const SubMenu = ({ show }) => {
+const SubMenu = ({ show, setShop }) => {
   const state = useContext(CtxState);
   const { subMenu1, subMenu2, subMenu3 } = state;
   return (
@@ -63,19 +74,25 @@ const SubMenu = ({ show }) => {
           <Lnb>
             {subMenu1.map((menu, idx) => {
               const { name } = menu;
-              return <Menu name={name} key={idx} />;
+              return (
+                <Menu setShop={setShop} show={show} name={name} key={idx} />
+              );
             })}
           </Lnb>
           <Lnb>
             {subMenu2.map((menu, idx) => {
               const { name } = menu;
-              return <Menu name={name} key={idx} />;
+              return (
+                <Menu setShop={setShop} show={show} name={name} key={idx} />
+              );
             })}
           </Lnb>
           <Lnb>
             {subMenu3.map((menu, idx) => {
               const { name } = menu;
-              return <Menu name={name} key={idx} />;
+              return (
+                <Menu setShop={setShop} show={show} name={name} key={idx} />
+              );
             })}
           </Lnb>
         </LnbContainer>

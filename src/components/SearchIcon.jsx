@@ -1,76 +1,97 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { CtxState } from "../context/HumanCtxprovider";
 
-const SubNav = styled.div`
+const Search = styled.div`
   display: none;
   position: absolute;
   left: 50%;
-  top: -9999px;
   width: 99vw;
   height: 300px;
   background-color: #fff;
   transform: translate(-50%, 0);
-
-  &.show {
-    display: block;
-    top: 20px;
-    z-index: 100;
-  }
-`;
-
-const Search = styled(SubNav)`
   height: 100px;
   &.on {
     display: block;
     top: 130px;
-    z-index: 100;
+    z-index: 300;
   }
+
   > .searchBox {
-    display: flex;
-    justify-content: flex-start;
-    align-items: bottom;
     position: absolute;
     left: 50%;
     top: 50%;
     width: 500px;
-    height: 40px;
+    height: 30px;
     border-bottom: 1px solid black;
     transform: translate(-50%, -50%);
-    > input {
-      width: 90%;
-      border: none;
-      outline: none;
-      padding-left: 40px;
-    }
-    > i {
-      margin-right: 20px;
-      &:last-child {
-        margin: 0;
+    > form {
+      > label {
+        display: flex;
+        justify-content: flex-start;
+        align-items: bottom;
+        > input {
+          width: 90%;
+          border: none;
+          outline: none;
+          padding-left: 10px;
+        }
+        > i {
+          margin-right: 20px;
+          font-size: 16px;
+          &:last-child {
+            margin: 0;
+          }
+        }
       }
     }
   }
 `;
 
-const SearchIcon = ({ search }) => {
-  //   const state = useContext(CtxState);
-  //   const [shop, setShop] = useState(state);
+const SearchIcon = ({ search, setShop }) => {
+  const state = useContext(CtxState);
+  const { allItem } = state;
+  const $input = useRef(null);
+  const [keyward, setKeyward] = useState("");
 
-  //   const { search } = shop;
+  const searchFn = () => {
+    setShop((prev) => ({ ...prev, search: !state.search }));
+    $input.current.focus();
+  };
 
-  const [offSearch, setOffSearch] = useState(search);
+  const searchOffFn = () => {
+    setShop(!search);
+  };
 
-  const searchOutFn = () => {
-    setOffSearch(!search);
+  const searchChange = (evt) => {
+    setKeyward(evt.target.value);
+  };
+
+  const searchSubmitFn = (evt) => {
+    evt.preventDefault();
   };
 
   return (
     <>
-      <Search className={search ? "on" : "off"}>
+      <i class="fas fa-search" onClick={searchFn}></i>
+      <Search className={search ? "on" : ""}>
         <div className="searchBox">
-          <input type="text" />
-          <i class="fas fa-search"></i>
-          <i class="fas fa-times" onClick={searchOutFn}></i>
+          <form action="#">
+            <label htmlFor="keyward">
+              <input
+                type="text"
+                id="keyward"
+                value={keyward}
+                autoComplete="off"
+                autoFocus
+                ref={$input}
+                placeholder="검색"
+                onChange={searchChange}
+              />
+              <i class="fas fa-search" onClick={searchSubmitFn}></i>
+              <i class="fas fa-times" onClick={searchOffFn}></i>
+            </label>
+          </form>
         </div>
       </Search>
     </>

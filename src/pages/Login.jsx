@@ -52,20 +52,23 @@ const LoginButton = styled.button`
   background-color: #000;
 `;
 
+const LogOutContainer = styled(LoginContainer)``;
+const Logout = styled.button`
+  width: 80px;
+  height: 40px;
+`;
+
 const Login = () => {
   const state = useContext(CtxState);
-  const dispatch = useContext(CtxDispatch);
-  const storage = JSON.parse(localStorage["human"] || JSON.stringify(state));
   const navigate = useNavigate();
-
-  // const { isLogin } = state;
-
   const [input, setInput] = useState({
     logEmail: "",
     logPsw: "",
   });
-
+  const { isLogin } = state;
   const { logEmail, logPsw } = input;
+
+  const [login, setLogin] = useState(isLogin);
 
   const ChangeFn = (evt) => {
     const { id, value } = evt.target;
@@ -77,36 +80,61 @@ const Login = () => {
 
   return (
     <>
-      <HumanCtxprovider>
-        <LoginContainer>
-          <Title>Login</Title>
-          <Form>
-            <Label htmlFor="logEmail">
-              <Email
-                value={logEmail}
-                onChange={ChangeFn}
-                name="logEmail"
-                id="logEmail"
-                placeholder="Your email address"
-                autoFocus
-              />
-            </Label>
-            <Label htmlFor="logPsw">
-              <Password
-                type="password"
-                value={logPsw}
-                onChange={ChangeFn}
-                name="logPsw"
-                id="logPsw"
-                placeholder="Your password"
-              />
-            </Label>
-            <LoginButton>Login</LoginButton>
-          </Form>
-          <Link>Forgot your password?</Link>
-          <Link to={"/account/register"}>Create an account</Link>
-        </LoginContainer>
-      </HumanCtxprovider>
+      <LoginContainer style={{ display: login ? "none" : "blok" }}>
+        <Title>Login</Title>
+        <Form
+          onSubmit={(evt) => {
+            evt.preventDefault();
+            // navigate("/");
+            setLogin(!login);
+          }}
+        >
+          <Label htmlFor="logEmail">
+            <Email
+              value={logEmail}
+              onChange={ChangeFn}
+              name="logEmail"
+              id="logEmail"
+              placeholder="Your email address"
+              autoFocus
+            />
+          </Label>
+          <Label htmlFor="logPsw">
+            <Password
+              type="password"
+              value={logPsw}
+              onChange={ChangeFn}
+              name="logPsw"
+              id="logPsw"
+              placeholder="Your password"
+            />
+          </Label>
+          <LoginButton
+            onClick={(evt) => {
+              evt.preventDefault();
+              // navigate("/");
+              setLogin(!login);
+            }}
+          >
+            Login
+          </LoginButton>
+        </Form>
+        <Link>Forgot your password?</Link>
+        <Link to={"/account/register"}>Create an account</Link>
+      </LoginContainer>
+
+      <LogOutContainer style={{ display: login ? "block" : "none" }}>
+        <p>여기까지 왔다니 대단하다!!</p>
+        <Logout
+          onClick={(evt) => {
+            evt.preventDefault();
+            // navigate("/");
+            setLogin(!login);
+          }}
+        >
+          logOut
+        </Logout>
+      </LogOutContainer>
     </>
   );
 };

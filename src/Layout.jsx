@@ -235,6 +235,7 @@ const Section = styled.section`
   position: relative;
   width: 100%;
   min-height: 800px;
+  margin-bottom: 300px;
 `;
 
 const Shadow = styled.div`
@@ -242,6 +243,7 @@ const Shadow = styled.div`
   width: 100%;
   height: 100%;
   position: absolute;
+  z-index: 200;
   left: 0;
   top: 0;
   right: 0;
@@ -262,37 +264,10 @@ const Footer = styled.footer`
     left: 50%;
     background-color: #fff;
     transform: translate(-50%, 0);
-    border: 1px solid gold;
-  }
-
-  > .footNav {
-    top: 0;
-    > div {
-      border: none;
-      border-bottom: 1px solid #ccc;
-      > ul {
-        border: none;
-        > li {
-          text-align: left;
-        }
-      }
-    }
-  }
-  > .ect {
-    top: 250px;
-    > div {
-      /* border: none; */
-      > ul {
-        border: none;
-        > li {
-          text-align: left;
-        }
-      }
-    }
   }
 `;
 const SecondLogo = styled.div`
-  top: 550px;
+  top: 300px;
   width: 207px;
   height: 37px;
   background-image: url(${title2});
@@ -317,12 +292,11 @@ const Layout = () => {
     setShop(!show);
   };
 
-  const searchFn = () => {
-    setShop((prev) => ({ ...prev, search: !state.search }));
-  };
-
   const homeFn = () => {
     navigate("/");
+  };
+  const loginFn = () => {
+    navigate("/account/login");
   };
 
   return (
@@ -332,7 +306,7 @@ const Layout = () => {
         <DivContianer>
           <Header>
             <User>
-              <i class="far fa-user"></i>
+              <i class="far fa-user" onClick={loginFn}></i>
               <Selection>
                 <option>한국어</option>
                 <option>English</option>
@@ -345,17 +319,14 @@ const Layout = () => {
             <Nav>
               <NavLink onMouseOver={shopFn} onMouseOut={shopOutFn}>
                 SHOP
-                <SubMenu show={show} />
+                <SubMenu show={show} setShop={setShop} />
               </NavLink>
               <NavLink to={`/news`}>NEWS</NavLink>
               <NavLink to={`/about`}>ABOUT</NavLink>
             </Nav>
 
             <Menu>
-              <i class="fas fa-search" onClick={searchFn}>
-                <SearchIcon search={search} />
-              </i>
-
+              <SearchIcon search={search} setShop={setShop} />
               <i class="fas fa-shopping-bag"></i>
 
               <i class="fas fa-bars"></i>
@@ -369,14 +340,7 @@ const Layout = () => {
 
           <Footer>
             <SubMenu className="footNav" />
-
-            <SecondLogo className="logo" />
-          </Footer>
-        </DivContianer>
-      </HumanCtxprovider>
-
-      {/* 왜 안나오는지 모르겠다.  */}
-      {/* <SubNav className="ect">
+            {/* <SubNav className="ect">
               <LnbContainer>
                 <Lnb>
                   <li>뉴스레터 등록</li>
@@ -412,6 +376,10 @@ const Layout = () => {
                 </Lnb>
               </LnbContainer>
             </SubNav> */}
+            <SecondLogo className="logo" />
+          </Footer>
+        </DivContianer>
+      </HumanCtxprovider>
     </>
   );
 };
