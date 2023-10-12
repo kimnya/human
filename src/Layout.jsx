@@ -1,11 +1,13 @@
-import React, { useContext, useState } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import title from './asset/title.png';
-import title2 from './asset/title2.png';
-import HumanCtxprovider, { CtxState } from './context/HumanCtxprovider';
-import Home from './pages/Home';
-import { useEffect } from 'react';
+import React, { useContext, useState } from "react";
+import styled, { createGlobalStyle } from "styled-components";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import title from "./asset/title.png";
+import title2 from "./asset/title2.png";
+import HumanCtxprovider, { CtxState } from "./context/HumanCtxprovider";
+import Home from "./pages/Home";
+import { useEffect } from "react";
+import SubMenu from "./components/SubMenu";
+import SearchIcon from "./components/SearchIcon";
 
 const GlobalStyle = createGlobalStyle`
 
@@ -153,446 +155,265 @@ body {
 `;
 
 const DivContianer = styled.div`
-	width: 100%;
+  width: 100%;
 `;
 
 const Header = styled.header`
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	position: relative;
-	width: 100%;
-	height: 130px;
-	background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 130px;
+  background-color: #fff;
 `;
 const Selection = styled.select`
-	border: none;
-	outline: none;
-	&:after {
-		border: 0px solid;
-		border-color: black, transparent, transparent, transparent;
-		content: '';
-	}
+  border: none;
+  outline: none;
+  &:after {
+    border: 0px solid;
+    border-color: black, transparent, transparent, transparent;
+    content: "";
+  }
 `;
 
 const Logo = styled.img`
-	display: block;
-	position: absolute;
-	left: 50%;
-	top: 10px;
-	width: 74px;
-	height: auto;
-	transform: translate(-50%, 0);
+  display: block;
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  width: 74px;
+  height: auto;
+  transform: translate(-50%, 0);
 `;
 
 const Nav = styled.nav`
-	display: flex;
-	position: absolute;
-	left: calc(50% - 300px);
-	bottom: 5px;
-	> a {
-		display: block;
-		width: 100px;
-		height: 20px;
-		margin-right: 150px;
-		font-size: 13px;
-		text-align: center;
+  display: flex;
+  position: absolute;
+  left: calc(50% - 300px);
+  bottom: 5px;
+  > a {
+    display: block;
+    width: 100px;
+    height: 20px;
+    margin-right: 150px;
+    font-size: 13px;
+    text-align: center;
 
-		&:last-child {
-			margin: 0;
-		}
-	}
-`;
-
-const SubNav = styled.div`
-	display: none;
-	position: absolute;
-	left: 50%;
-	top: -9999px;
-	width: 100%;
-	height: 300px;
-	background-color: #fff;
-	transform: translate(-50%, 0);
-
-	&.show {
-		display: block;
-		top: 120px;
-		z-index: 100;
-	}
-`;
-const LnbContainer = styled.div`
-	display: flex;
-	justify-content: space-around;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-
-	transform: translate(-55%, -50%);
-`;
-
-const Lnb = styled.ul`
-	width: 280px;
-	> li {
-		margin-bottom: 25px;
-		text-align: center;
-		> a {
-			display: block;
-			width: 100%;
-			height: 100%;
-		}
-	}
+    &:last-child {
+      margin: 0;
+    }
+  }
 `;
 
 const User = styled.div`
-	> i {
-		margin: 20px;
-		font-size: 22px;
-	}
-	> p {
-		display: none;
-		> span {
-			letter-spacing: 2px;
-			font-weight: bold;
-			font-size: 16px;
-			text-decoration: underline;
-		}
-		&.ment {
-			display: block;
-		}
-	}
+  > i {
+    margin: 20px;
+    font-size: 22px;
+  }
+  > p {
+    display: none;
+    > span {
+      letter-spacing: 2px;
+      font-weight: bold;
+      font-size: 16px;
+      text-decoration: underline;
+    }
+    &.ment {
+      display: block;
+    }
+  }
 `;
 const Menu = styled.p`
-	> i {
-		margin-right: 20px;
-		font-size: 18px;
-	}
-`;
-
-const Search = styled(SubNav)`
-	height: 100px;
-	&.on {
-		display: block;
-		top: 130px;
-		z-index: 100;
-	}
-	> .searchBox {
-		display: flex;
-		justify-content: flex-start;
-		align-items: bottom;
-		position: absolute;
-		left: 50%;
-		top: 50%;
-		width: 500px;
-		height: 40px;
-		border-bottom: 1px solid black;
-		transform: translate(-50%, -50%);
-		> input {
-			width: 90%;
-			border: none;
-			outline: none;
-			padding-left: 40px;
-		}
-		> i {
-			margin-right: 20px;
-			&:last-child {
-				margin: 0;
-			}
-		}
-	}
+  > i {
+    margin-right: 20px;
+    font-size: 18px;
+  }
 `;
 
 const Section = styled.section`
-	position: relative;
-	width: 100%;
-	min-height: 800px;
+  position: relative;
+  width: 100%;
+  min-height: 800px;
 `;
 
 const Shadow = styled.div`
-	display: none;
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	left: 0;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	background-color: #000;
-	opacity: 70%;
-	&.on {
-		display: block;
-	}
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000;
+  opacity: 70%;
+  &.on {
+    display: block;
+  }
 `;
 
 const Footer = styled.footer`
-	position: relative;
-	> div {
-		width: 50%;
-		display: block;
-		position: absolute;
-		left: 50%;
-		background-color: #fff;
-		transform: translate(-50%, 0);
-	}
+  position: relative;
+  > div {
+    width: 50%;
+    display: block;
+    position: absolute;
+    left: 50%;
+    background-color: #fff;
+    transform: translate(-50%, 0);
+    border: 1px solid gold;
+  }
 
-	> .footNav {
-		top: 0;
-		> div {
-			/* border: none; */
-			border-bottom: 1px solid #ccc;
-			> ul {
-				border: none;
-				> li {
-					text-align: left;
-				}
-			}
-		}
-	}
-	> .ect {
-		top: 250px;
-		> div {
-			/* border: none; */
-			> ul {
-				border: none;
-				> li {
-					text-align: left;
-				}
-			}
-		}
-	}
+  > .footNav {
+    top: 0;
+    > div {
+      border: none;
+      border-bottom: 1px solid #ccc;
+      > ul {
+        border: none;
+        > li {
+          text-align: left;
+        }
+      }
+    }
+  }
+  > .ect {
+    top: 250px;
+    > div {
+      /* border: none; */
+      > ul {
+        border: none;
+        > li {
+          text-align: left;
+        }
+      }
+    }
+  }
 `;
 const SecondLogo = styled.div`
-	top: 550px;
-	width: 207px;
-	height: 37px;
-	background-image: url(${title2});
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-size: contain;
-	transform: translate(-50%, 0);
+  top: 550px;
+  width: 207px;
+  height: 37px;
+  background-image: url(${title2});
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  transform: translate(-50%, 0);
 `;
 
 const Layout = () => {
-	const navigate = useNavigate();
-	const state = useContext(CtxState);
-	const [shop, setShop] = useState(state);
+  const navigate = useNavigate();
+  const state = useContext(CtxState);
+  const [shop, setShop] = useState(state);
 
-	const { show, search } = shop;
+  const { show, search } = shop;
 
-	// const { isLogin } = state;
+  const shopFn = () => {
+    setShop((prev) => ({ ...prev, show: !state.show }));
+  };
 
-	const storage = JSON.parse(localStorage['human'] || JSON.stringify(state));
+  const shopOutFn = () => {
+    setShop(!show);
+  };
 
-	const shopFn = () => {
-		setShop((prev) => ({ ...prev, show: !state.show }));
-	};
+  const searchFn = () => {
+    setShop((prev) => ({ ...prev, search: !state.search }));
+  };
 
-	const shopOutFn = () => {
-		setShop(!show);
-	};
+  const homeFn = () => {
+    navigate("/");
+  };
 
-	const searchFn = () => {
-		setShop((prev) => ({ ...prev, search: !state.search }));
-	};
+  return (
+    <>
+      <GlobalStyle />
+      <HumanCtxprovider>
+        <DivContianer>
+          <Header>
+            <User>
+              <i class="far fa-user"></i>
+              <Selection>
+                <option>한국어</option>
+                <option>English</option>
+                <option>일본어</option>
+              </Selection>
+            </User>
 
-	const searchOutFn = () => {
-		setShop(!search);
-		alert(search);
-	};
+            <Logo onClick={homeFn} src={title}></Logo>
 
-	const myPageFn = () => {
-		navigate('/account/');
-	};
-	const loginFn = () => {
-		navigate('/account/login');
-	};
+            <Nav>
+              <NavLink onMouseOver={shopFn} onMouseOut={shopOutFn}>
+                SHOP
+                <SubMenu show={show} />
+              </NavLink>
+              <NavLink to={`/news`}>NEWS</NavLink>
+              <NavLink to={`/about`}>ABOUT</NavLink>
+            </Nav>
 
-	const homeFn = () => {
-		navigate('/');
-	};
-	{
-		console.log('login=' + state.isLogin);
-		console.log(state);
-	}
-	return (
-		<>
-			<GlobalStyle />
-			<HumanCtxprovider>
-				<DivContianer>
-					<Header>
-						<User>
-							<p className={state.isLogin ? 'ment' : ''}>
-								안녕하세요 {storage.fName}님 좋은 하루 보내세요.{' '}
-							</p>
-							<i class="far fa-user" onClick={state.isLogin ? myPageFn : loginFn}></i>
-							<Selection>
-								<option>한국어</option>
-								<option>English</option>
-								<option>일본어</option>
-							</Selection>
-						</User>
+            <Menu>
+              <i class="fas fa-search" onClick={searchFn}>
+                <SearchIcon search={search} />
+              </i>
 
-						<Logo onClick={homeFn} src={title}></Logo>
+              <i class="fas fa-shopping-bag"></i>
 
-						<Nav>
-							<NavLink onMouseOver={shopFn} onMouseOut={shopOutFn}>
-								SHOP
-							</NavLink>
-							<NavLink to={`/news`}>NEWS</NavLink>
-							<NavLink to={`/about`}>ABOUT</NavLink>
-						</Nav>
-						<SubNav className={show ? 'show' : ''}>
-							<LnbContainer>
-								<Lnb>
-									<li>
-										{' '}
-										<NavLink to={`/collections/all`}>모든아이템</NavLink>
-									</li>
+              <i class="fas fa-bars"></i>
+            </Menu>
+          </Header>
 
-									<li>
-										{' '}
-										<NavLink>신상품</NavLink>
-									</li>
+          <Section>
+            <Shadow className={search || show ? "on" : ""} />
+            <Outlet />
+          </Section>
 
-									<li>아우터</li>
+          <Footer>
+            <SubMenu className="footNav" />
 
-									<li>셔츠</li>
+            <SecondLogo className="logo" />
+          </Footer>
+        </DivContianer>
+      </HumanCtxprovider>
 
-									<li>티셔츠</li>
+      {/* 왜 안나오는지 모르겠다.  */}
+      {/* <SubNav className="ect">
+              <LnbContainer>
+                <Lnb>
+                  <li>뉴스레터 등록</li>
 
-									<li>니트 커트소</li>
-								</Lnb>
-								<Lnb>
-									<li>
-										{' '}
-										<NavLink>하의</NavLink>
-									</li>
+                  <li>HUMAN MADE 취급점포</li>
 
-									<li>신발</li>
+                  <li>이용약관</li>
 
-									<li>모자</li>
+                  <li>
+                    배송지 :
+                    <Selection>
+                      <option>대한민국</option>
+                      <option>일본</option>
+                      <option>중국</option>
+                    </Selection>
+                  </li>
+                </Lnb>
+                <Lnb>
+                  <li>배송방법 *우송료에 대해</li>
 
-									<li>가방 & 파우치</li>
+                  <li>지불방법에 대해</li>
 
-									<li>엑세서리</li>
+                  <li>개인정보취급방침</li>
 
-									<li>이너웨어</li>
-								</Lnb>
-								<Lnb>
-									<li>홈 & 라이프 스타일</li>
+                  <li>위조품*모방품 방지 대책에 관하여 </li>
+                </Lnb>
+                <Lnb>
+                  <li>FAQ</li>
 
-									<li>협업 아이템</li>
+                  <li>각종문의</li>
 
-									<li>Wasted Youth</li>
-
-									<li>CACTUS PLANT FLEA MARKET</li>
-								</Lnb>
-							</LnbContainer>
-						</SubNav>
-
-						<Menu>
-							<i class="fas fa-search" onClick={searchFn}>
-								<Search className={search ? 'on' : 'off'}>
-									<div className="searchBox">
-										<input type="text" />
-										<i class="fas fa-search"></i>
-										<i class="fas fa-times" onClick={searchOutFn}></i>
-									</div>
-								</Search>
-							</i>
-
-							<i class="fas fa-shopping-bag"></i>
-
-							<i class="fas fa-bars"></i>
-						</Menu>
-					</Header>
-
-					<Section>
-						<Shadow className={search ? 'on' : ''} />
-						<Outlet />
-					</Section>
-
-					<Footer>
-						<SubNav className="footNav">
-							<LnbContainer>
-								<Lnb>
-									<li>모든아이템</li>
-
-									<li>신상품</li>
-
-									<li>아우터</li>
-
-									<li>셔츠</li>
-
-									<li>티셔츠</li>
-
-									<li>니트 커트소</li>
-								</Lnb>
-								<Lnb>
-									<li>하의</li>
-
-									<li>신발</li>
-
-									<li>모자</li>
-
-									<li>가방 & 파우치</li>
-
-									<li>엑세서리</li>
-
-									<li>이너웨어</li>
-								</Lnb>
-								<Lnb>
-									<li>홈 & 라이프 스타일</li>
-
-									<li>협업 아이템</li>
-
-									<li>Wasted Youth</li>
-
-									<li>CACTUS PLANT FLEA MARKET</li>
-								</Lnb>
-							</LnbContainer>
-						</SubNav>
-						<SubNav className="ect">
-							<LnbContainer>
-								<Lnb>
-									<li>뉴스레터 등록</li>
-
-									<li>HUMAN MADE 취급점포</li>
-
-									<li>이용약관</li>
-
-									<li>
-										배송지 :
-										<Selection>
-											<option>대한민국</option>
-											<option>일본</option>
-											<option>중국</option>
-										</Selection>
-									</li>
-								</Lnb>
-								<Lnb>
-									<li>배송방법 *우송료에 대해</li>
-
-									<li>지불방법에 대해</li>
-
-									<li>개인정보취급방침</li>
-
-									<li>위조품*모방품 방지 대책에 관하여 </li>
-								</Lnb>
-								<Lnb>
-									<li>FAQ</li>
-
-									<li>각종문의</li>
-
-									<li>특정 상거래법에 근거한 표기 </li>
-								</Lnb>
-							</LnbContainer>
-						</SubNav>
-						<SecondLogo className="logo" />
-					</Footer>
-				</DivContianer>
-			</HumanCtxprovider>
-		</>
-	);
+                  <li>특정 상거래법에 근거한 표기 </li>
+                </Lnb>
+              </LnbContainer>
+            </SubNav> */}
+    </>
+  );
 };
 
 export default Layout;
