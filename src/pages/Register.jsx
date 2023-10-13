@@ -227,7 +227,7 @@ const Register = () => {
     evt.preventDefault();
 
     if (isFname && isLname && isRegiEmail && isRegiPsw) {
-      navigate("/");
+      navigate("/account/login");
     } else {
       alert("입력한 값을 다시 한번 체크해 주세요 ");
     }

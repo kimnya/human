@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HumanCtxprovider, {
@@ -7,30 +7,32 @@ import HumanCtxprovider, {
 } from "../context/HumanCtxprovider";
 
 const LoginContainer = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-around;
-  align-items: center;
   position: absolute;
   left: 50%;
   top: 50%;
   height: 300px;
-  margin: 0 auto;
   transform: translate(-50%, -50%);
-  a {
+
+  > a {
+    display: flex;
+    justify-content: center;
     text-decoration: underline;
-    &:nth-of-type(1) {
-      align-self: flex-start;
-    }
   }
 `;
-const Title = styled.h2``;
+const Title = styled.h2`
+  margin-bottom: 15px;
+  text-align: center;
+`;
 
 const Form = styled.form`
   display: flex;
   flex-flow: column nowrap;
   justify-content: space-between;
-  height: 100px;
+  height: 200px;
+  > a {
+    font-size: 14px;
+    text-decoration: underline;
+  }
 `;
 
 const Email = styled.input`
@@ -44,8 +46,10 @@ const Password = styled(Email)``;
 const Label = styled.label``;
 
 const LoginButton = styled.button`
+  align-self: center;
   width: 100px;
   height: 40px;
+  margin-bottom: 15px;
   line-height: 40px;
   text-align: center;
   color: #fff;
@@ -80,7 +84,7 @@ const Login = () => {
 
   return (
     <>
-      <LoginContainer style={{ display: login ? "none" : "blok" }}>
+      <LoginContainer style={{ display: login ? "none" : "block" }}>
         <Title>Login</Title>
         <Form
           onSubmit={(evt) => {
@@ -109,6 +113,7 @@ const Login = () => {
               placeholder="Your password"
             />
           </Label>
+          <Link>Forgot your password?</Link>
           <LoginButton
             onClick={(evt) => {
               evt.preventDefault();
@@ -119,16 +124,18 @@ const Login = () => {
             Login
           </LoginButton>
         </Form>
-        <Link>Forgot your password?</Link>
         <Link to={"/account/register"}>Create an account</Link>
       </LoginContainer>
 
       <LogOutContainer style={{ display: login ? "block" : "none" }}>
-        <p>여기까지 왔다니 대단하다!!</p>
+        <p>myPage</p>
         <Logout
           onClick={(evt) => {
             evt.preventDefault();
-            // navigate("/");
+            setInput({
+              logEmail: "",
+              logPsw: "",
+            });
             setLogin(!login);
           }}
         >
