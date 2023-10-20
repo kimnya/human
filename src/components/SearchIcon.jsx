@@ -1,21 +1,17 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { CtxState } from "../context/HumanCtxprovider";
+import { CtxDispatch, CtxState } from "../context/HumanCtxprovider";
 
 const Search = styled.div`
-  display: none;
   position: absolute;
+  z-index: 300;
   left: 50%;
+  top: 130px;
   width: 99vw;
   height: 300px;
   background-color: #fff;
   transform: translate(-50%, 0);
   height: 100px;
-  &.on {
-    display: block;
-    top: 130px;
-    z-index: 300;
-  }
 
   > .searchBox {
     position: absolute;
@@ -48,52 +44,46 @@ const Search = styled.div`
   }
 `;
 
-const SearchIcon = ({ search, setShop }) => {
-  const state = useContext(CtxState);
-  const { allItem } = state;
-  const $input = useRef(null);
-  const [keyward, setKeyward] = useState("");
-
-  const searchFn = () => {
-    setShop((prev) => ({ ...prev, search: !state.search }));
-    $input.current.focus();
-  };
-
-  const searchOffFn = () => {
-    setShop(!search);
-  };
+const SearchIcon = ({ searchFn, searchOffFn, search }) => {
+  const [keyword, setKeyward] = useState("");
+  const dispatch = useContext(CtxDispatch);
 
   const searchChange = (evt) => {
     setKeyward(evt.target.value);
   };
 
-  const searchSubmitFn = (evt) => {
+  const keywordFn = (evt) => {
     evt.preventDefault();
+    setKeyward("");
+    dispatch({ type: "KEYWORD", data: { keyword, search: false } });
   };
 
   return (
     <>
       <i class="fas fa-search" onClick={searchFn}></i>
-      <Search className={search ? "on" : ""}>
-        <div className="searchBox">
-          <form action="#">
-            <label htmlFor="keyward">
-              <input
-                type="text"
-                id="keyward"
-                value={keyward}
-                autoComplete="off"
-                autoFocus
-                ref={$input}
-                placeholder="검색"
-                onChange={searchChange}
-              />
-              <i class="fas fa-search" onClick={searchSubmitFn}></i>
-              <i class="fas fa-times" onClick={searchOffFn}></i>
-            </label>
-          </form>
-        </div>
-      </Search>
+      {search ? (
+        <Search>
+          <div className="searchBox">
+            <form onSubmit={keywordFn}>
+              <label htmlFor="keyword">
+                <input
+                  type="text"
+                  id="keyword"
+                  value={keyword}
+                  autoComplete="off"
+                  autoFocus
+                  placeholder="검색"
+                  onChange={searchChange}
+                />
+                <i class="fas fa-search" onClick={keywordFn}></i>
+                <i class="fas fa-times" onClick={searchOffFn}></i>
+              </label>
+            </form>
+          </div>
+        </Search>
+      ) : (
+        <null />
+      )}
     </>
   );
 };

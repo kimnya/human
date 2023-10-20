@@ -4,20 +4,16 @@ import styled from "styled-components";
 import { CtxState } from "../context/HumanCtxprovider";
 
 const SubNav = styled.div`
-  display: none;
+  display: block;
   position: absolute;
+  z-index: 300;
   left: 50%;
-  top: 0;
+  top: 20px;
   width: 99vw;
   height: 300px;
   background-color: #fff;
   transform: translate(-50%, 0);
 
-  &.show {
-    display: block;
-    top: 20px;
-    z-index: 300;
-  }
   &.footNav {
     display: block;
     top: 0;
@@ -49,50 +45,39 @@ const Lnb = styled.ul`
   }
 `;
 
-const Menu = ({ name, show, setShop }) => {
+const Menu = ({ name, shopOutFn }) => {
   return (
     <li>
-      <NavLink
-        onClick={() => {
-          setShop(!show);
-        }}
-        to={`/collections/all`}
-      >
+      <NavLink onClick={shopOutFn} to={`/collections/all`}>
         {name}
       </NavLink>
     </li>
   );
 };
 
-const SubMenu = ({ show, setShop }) => {
+const SubMenu = ({ shopOutFn }) => {
   const state = useContext(CtxState);
   const { subMenu1, subMenu2, subMenu3 } = state;
   return (
     <>
-      <SubNav className={show ? "show" : ""}>
+      <SubNav>
         <LnbContainer>
           <Lnb>
             {subMenu1.map((menu, idx) => {
               const { name } = menu;
-              return (
-                <Menu setShop={setShop} show={show} name={name} key={idx} />
-              );
+              return <Menu shopOutFn={shopOutFn} name={name} key={idx} />;
             })}
           </Lnb>
           <Lnb>
             {subMenu2.map((menu, idx) => {
               const { name } = menu;
-              return (
-                <Menu setShop={setShop} show={show} name={name} key={idx} />
-              );
+              return <Menu shopOutFn={shopOutFn} name={name} key={idx} />;
             })}
           </Lnb>
           <Lnb>
             {subMenu3.map((menu, idx) => {
               const { name } = menu;
-              return (
-                <Menu setShop={setShop} show={show} name={name} key={idx} />
-              );
+              return <Menu shopOutFn={shopOutFn} name={name} key={idx} />;
             })}
           </Lnb>
         </LnbContainer>

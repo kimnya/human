@@ -3,7 +3,10 @@ import styled, { createGlobalStyle } from "styled-components";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import title from "./asset/title.png";
 import title2 from "./asset/title2.png";
-import HumanCtxprovider, { CtxState } from "./context/HumanCtxprovider";
+import HumanCtxprovider, {
+  CtxDispatch,
+  CtxState,
+} from "./context/HumanCtxprovider";
 import Home from "./pages/Home";
 import { useEffect } from "react";
 import SubMenu from "./components/SubMenu";
@@ -224,7 +227,7 @@ const User = styled.div`
     }
   }
 `;
-const Menu = styled.p`
+const Menu = styled.div`
   > i {
     margin-right: 20px;
     font-size: 18px;
@@ -280,16 +283,16 @@ const SecondLogo = styled.div`
 const Layout = () => {
   const navigate = useNavigate();
   const state = useContext(CtxState);
-  const [shop, setShop] = useState(state);
+  const dispatch = useContext(CtxDispatch);
 
-  const { show, search } = shop;
+  const { show, search } = state;
 
   const shopFn = () => {
-    setShop((prev) => ({ ...prev, show: !state.show }));
+    dispatch({ type: "SHOW" });
   };
 
   const shopOutFn = () => {
-    setShop(!show);
+    dispatch({ type: "OFFSHOW" });
   };
 
   const homeFn = () => {
@@ -297,6 +300,13 @@ const Layout = () => {
   };
   const loginFn = () => {
     navigate("/account/login");
+  };
+
+  const searchFn = () => {
+    dispatch({ type: "SEARCH" });
+  };
+  const searchOffFn = () => {
+    dispatch({ type: "OFFSEARCH" });
   };
 
   return (
@@ -319,14 +329,18 @@ const Layout = () => {
             <Nav>
               <NavLink onMouseOver={shopFn} onMouseOut={shopOutFn}>
                 SHOP
-                <SubMenu show={show} setShop={setShop} />
+                {show ? <SubMenu shopOutFn={shopOutFn} /> : <null />}
               </NavLink>
               <NavLink to={`/news`}>NEWS</NavLink>
               <NavLink to={`/about`}>ABOUT</NavLink>
             </Nav>
 
             <Menu>
-              <SearchIcon search={search} setShop={setShop} />
+              <SearchIcon
+                searchFn={searchFn}
+                searchOffFn={searchOffFn}
+                search={search}
+              />
               <i class="fas fa-shopping-bag"></i>
 
               <i class="fas fa-bars"></i>

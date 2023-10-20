@@ -67,7 +67,7 @@ const ItemList = () => {
     <>
       <List>
         {allItem.map((item) => {
-          return <Items onClick={() => {}} key={item.id} item={item} />;
+          return <Items key={item.id} item={item} />;
         })}
       </List>
     </>

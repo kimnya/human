@@ -4,6 +4,7 @@ const initialData = {
   show: false,
   search: false,
   isLogin: false,
+  keyword: null,
   allItem: [
     {
       id: 1,
@@ -29,7 +30,7 @@ const initialData = {
     },
     {
       id: 4,
-      category: "이우터",
+      category: "아우터",
       name: "sprite Jacket",
       img: "https://humanmade.jp/cdn/shop/products/1EPxqCCzNLzyt_NDeyiBa_xuwoEn1IKXs_360x.jpg?v=1696054928",
       price: "320,000",
@@ -53,24 +54,38 @@ const initialData = {
   ],
   subMenu3: [
     { name: "홈 & 라이프 스타일" },
-    { name: "엽업 아이템" },
+    { name: "협업 아이템" },
     { name: "wasted Youth" },
     { name: "CACTUS PLANT FLEA MARKET" },
   ],
 };
-export const CtxState = createContext(initialData);
+export const CtxState = createContext(null);
 export const CtxDispatch = createContext(null);
 
 const reducer = (state, action) => {
   switch (action.type) {
-    // case 'LOGIN':
-    // 	return { ...state, isLogin: !state.isLogin };
+    case "SHOW":
+      return { ...state, show: !state.show };
+    case "OFFSHOW":
+      return { ...state, show: !state.show };
+    case "SEARCH":
+      return { ...state, search: !state.search };
+    case "KEYWORD":
+      return {
+        ...state,
+        allItem: state.allItem.filter((item) => {
+          return item.category.includes(action.data.keyword);
+        }),
+        search: action.data.search,
+      };
+
+    case "OFFSEARCH":
+      return { ...state, search: !state.search };
 
     default:
       return state;
   }
 };
-
 const HumanCtxprovider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialData);
 
