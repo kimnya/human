@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { CtxDispatch, CtxState } from "../context/HumanCtxprovider";
+import { useNavigate } from "react-router-dom";
 
 const Search = styled.div`
   position: absolute;
@@ -44,9 +45,10 @@ const Search = styled.div`
   }
 `;
 
-const SearchIcon = ({ searchFn, searchOffFn, search }) => {
+const SearchIcon = ({ searchOffFn }) => {
   const [keyword, setKeyward] = useState("");
   const dispatch = useContext(CtxDispatch);
+  const navigate = useNavigate();
 
   const searchChange = (evt) => {
     setKeyward(evt.target.value);
@@ -55,35 +57,38 @@ const SearchIcon = ({ searchFn, searchOffFn, search }) => {
   const keywordFn = (evt) => {
     evt.preventDefault();
     setKeyward("");
-    dispatch({ type: "KEYWORD", data: { keyword, search: false } });
+    dispatch({ type: "KEYWORD", data: { keyword } });
+    navigate("/search");
   };
 
+  const keywordFnEnter = (evt) => {
+    evt.preventDefault();
+    if (evt.key == 13) {
+      keywordFn();
+    }
+  };
   return (
     <>
-      <i class="fas fa-search" onClick={searchFn}></i>
-      {search ? (
-        <Search>
-          <div className="searchBox">
-            <form onSubmit={keywordFn}>
-              <label htmlFor="keyword">
-                <input
-                  type="text"
-                  id="keyword"
-                  value={keyword}
-                  autoComplete="off"
-                  autoFocus
-                  placeholder="검색"
-                  onChange={searchChange}
-                />
-                <i class="fas fa-search" onClick={keywordFn}></i>
-                <i class="fas fa-times" onClick={searchOffFn}></i>
-              </label>
-            </form>
-          </div>
-        </Search>
-      ) : (
-        <null />
-      )}
+      <Search>
+        <div className="searchBox">
+          <form onSubmit={keywordFnEnter}>
+            {/* onSubmit이벤트일때만 search창이 안없어지는 거였다.. 왜??  enterKey가 안먹히는 듯*/}
+            <label htmlFor="keyword">
+              <input
+                type="text"
+                id="keyword"
+                value={keyword}
+                autoComplete="off"
+                autoFocus
+                placeholder="검색"
+                onChange={searchChange}
+              />
+              <i class="fas fa-search" onClick={keywordFn}></i>
+              <i class="fas fa-times" onClick={searchOffFn}></i>
+            </label>
+          </form>
+        </div>
+      </Search>
     </>
   );
 };

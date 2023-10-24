@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { CtxState } from "../context/HumanCtxprovider";
+import { CtxData, CtxState } from "../context/HumanCtxprovider";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const List = styled.ul`
   display: flex;
@@ -15,18 +16,21 @@ const Item = styled.li``;
 const ImgBox = styled.div`
   position: relative;
   width: 380px;
-  height: 380px;
+  height: 420px;
   &:hover > div {
     display: block;
   }
   &:hover > img {
-    transform: scale(1.05);
+    transform: scale(1.02);
+  }
+  > img {
+    width: 100%;
   }
 `;
 const Shadow = styled.div`
   display: none;
   width: 100%;
-  height: 100%;
+  height: 380px;
   position: absolute;
   left: 0;
   top: 0;
@@ -40,34 +44,37 @@ const Img = styled.img`
   transition: all 0.3s;
 `;
 const Items = ({ item }) => {
-  const { name, img, price, id } = item;
+  const { title, productId, lprice, image } = item;
   return (
     <Item>
-      <Link to={`/products/${id - 1}`}>
+      <Link to={`/products/${productId}`}>
         <ImgBox>
           <Shadow />
-          <Img src={img} alt={name} />
+          <Img src={image} alt={title} />
         </ImgBox>
 
         <p>
-          <span>{name}</span>
+          <span>
+            {title.replace(
+              /배송|국내|해외|당일|<b>|휴먼|메이드|<\/b>|[a-z]|[A-Z]|[0-9]|일본|-/g,
+              ""
+            )}
+          </span>
         </p>
-        <span>\{price}</span>
+        <span>\{lprice}</span>
       </Link>
     </Item>
   );
 };
 
 const ItemList = () => {
-  const state = useContext(CtxState);
-
-  const { allItem } = state;
+  const data = useContext(CtxData);
 
   return (
     <>
       <List>
-        {allItem.map((item) => {
-          return <Items key={item.id} item={item} />;
+        {data.map((item) => {
+          return <Items key={item.productId} item={item} />;
         })}
       </List>
     </>

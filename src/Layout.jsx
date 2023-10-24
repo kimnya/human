@@ -11,6 +11,7 @@ import Home from "./pages/Home";
 import { useEffect } from "react";
 import SubMenu from "./components/SubMenu";
 import SearchIcon from "./components/SearchIcon";
+import axios from "axios";
 
 const GlobalStyle = createGlobalStyle`
 
@@ -336,11 +337,11 @@ const Layout = () => {
             </Nav>
 
             <Menu>
-              <SearchIcon
-                searchFn={searchFn}
-                searchOffFn={searchOffFn}
-                search={search}
-              />
+              <i class="fas fa-search" onClick={searchFn}>
+                {search ? <SearchIcon searchOffFn={searchOffFn} /> : null}
+                {/* 굳이 SearchIcon 컴포넌트에 i태그를 넣어놓고 search데이터값을 props로 넘기느니 이 방법이 코드가 간편하다.   */}
+              </i>
+
               <i class="fas fa-shopping-bag"></i>
 
               <i class="fas fa-bars"></i>

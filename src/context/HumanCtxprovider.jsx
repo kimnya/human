@@ -1,41 +1,12 @@
-import React, { createContext, useReducer } from "react";
+import axios from "axios";
+import React, { createContext, useEffect, useReducer, useState } from "react";
 
 const initialData = {
   show: false,
   search: false,
   isLogin: false,
   keyword: null,
-  allItem: [
-    {
-      id: 1,
-      category: "상의",
-      name: "s/s short sleeve",
-      img: "https://humanmade.jp/cdn/shop/products/1YgaS3zoQy6-toDvFNMWehvbz_Ixav2gd_360x.jpg?v=1695882304",
-      price: "5,8000",
-      desc: "생일 등 특별한 날을 기념한 선물로도 딱 맞는 매일 디자인의 DAILYT 셔츠 시리즈.  HUMAN MADE의 아이코닉 한 하트로고를 전신 무렵에 크게 프린트 해,뒷길에는 오늘의 날짜를 크게 프린트. 오늘밖에 손에 넣을 수 없는 스페셜 디자인입니다.※이 상품은 수주 상품이 됩니다. <br /> 수주 상품은 수주 후의 생산이되어, 상품의 신고까지 통상보다 시간이 걸립니다. 또, 배송의 일시 지정도 불가가 되고 있습니다.",
-    },
-    {
-      id: 2,
-      category: "아우터",
-      name: "basic Jacket",
-      img: "https://humanmade.jp/cdn/shop/products/1HtQqk-hmIzsYn6UWFTpXyotqcv4n5xgM_360x.jpg?v=1696039717",
-      price: "230,800",
-    },
-    {
-      id: 3,
-      category: "하의",
-      name: "basic pants",
-      img: "https://humanmade.jp/cdn/shop/products/10Eejxgdd003sFimLOnwT9_DKpJRAihSC_360x.jpg?v=1695259908",
-      price: "179,600",
-    },
-    {
-      id: 4,
-      category: "아우터",
-      name: "sprite Jacket",
-      img: "https://humanmade.jp/cdn/shop/products/1EPxqCCzNLzyt_NDeyiBa_xuwoEn1IKXs_360x.jpg?v=1696054928",
-      price: "320,000",
-    },
-  ],
+
   subMenu1: [
     { name: "모든 아이템" },
     { name: "신상품" },
@@ -61,6 +32,7 @@ const initialData = {
 };
 export const CtxState = createContext(null);
 export const CtxDispatch = createContext(null);
+export const CtxData = createContext(null);
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -73,15 +45,12 @@ const reducer = (state, action) => {
     case "KEYWORD":
       return {
         ...state,
-        allItem: state.allItem.filter((item) => {
-          return item.category.includes(action.data.keyword);
-        }),
-        search: action.data.search,
+        keyword: action.data.keyword,
+        search: !state.search,
       };
 
     case "OFFSEARCH":
       return { ...state, search: !state.search };
-
     default:
       return state;
   }
@@ -89,11 +58,39 @@ const reducer = (state, action) => {
 const HumanCtxprovider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialData);
 
+  const [data, setData] = useState([]);
+  const naverApi = async () => {
+    await axios
+      .get("/api/v1/search/shop.json", {
+        params: {
+          query: "휴먼메이드",
+          display: 5,
+        },
+        headers: {
+          "X-Naver-Client-Id": process.env.REACT_APP_NAVER_CLIENT_ID,
+          "X-Naver-Client-Secret": process.env.REACT_APP_NAVER_CLIENT_SECRET,
+        },
+      })
+      .then((res) => setData(res.data.items))
+      .catch((e) => {});
+  };
+
+  useEffect(() => {
+    naverApi();
+  }, []);
+  console.log(data);
+  // 출처 : https://yrnana.dev/post/2021-08-21-context-api-redux/
+  //   일반적으로 리액트 데이터는 부모로부터 자식으로 props를 통해 탑-다운으로 전달되는데, 이 단계가 너무 많아진다거나 전달을 여러곳에 해줘야하는 경우에 전역 스토어에 데이터를 저장하고 이를 데이터가 필요한 컴포넌트에 따로 공유할 수 있다.
+  // 어떤 데이터를 전역/로컬에 저장할 것인지는 개발자가 선택해야한다. 몇단계만 전달하면 되거나 굳이 전역으로 관리할 필요 없는 데이터를 전역 스토어에 넣는 것은 코드의 관리 측면에서도 좋지 않다.
+  // 이 말대로  다시 리팩토링할 데이터들이 보임
+
   return (
     <>
-      <CtxDispatch.Provider value={dispatch}>
-        <CtxState.Provider value={state}>{children}</CtxState.Provider>
-      </CtxDispatch.Provider>
+      <CtxData.Provider value={data}>
+        <CtxDispatch.Provider value={dispatch}>
+          <CtxState.Provider value={state}>{children}</CtxState.Provider>
+        </CtxDispatch.Provider>
+      </CtxData.Provider>
     </>
   );
 };

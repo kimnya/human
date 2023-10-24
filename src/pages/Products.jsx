@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
-import { CtxState } from "../context/HumanCtxprovider";
+import { CtxData, CtxState } from "../context/HumanCtxprovider";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -15,6 +15,7 @@ const Container = styled.div`
   }
   > .desc {
     width: 30%;
+    margin-left: 10%;
     padding-top: 30px;
 
     > h2 {
@@ -66,20 +67,34 @@ const Container = styled.div`
 `;
 
 const Products = () => {
-  const state = useContext(CtxState);
-  const params = useParams();
-  const products = state.allItem[params.id];
+  const data = useContext(CtxData);
+  const { productId } = useParams();
 
+  const products = data.find((product) => {
+    if (product.productId == productId) {
+      return true;
+    }
+  });
+
+  // 출처: https://think0wise.tistory.com/6
+  //  벨로퍼트님의 react-router-dom 예제로 풀어보려 했으나 배열안에 있는 객체의 값을 prams로 지정하는 방법을 몰라서(이거 때문이 아닐수 있다.) 해결하지 못함
+  // 방법을 찾다가 배열의 index가 달라져도 배열안에 객채의 id값과 usePrams() 파라미터 값이 일치할때 return 해주는 로직을 발견 해결했다.
   return (
     <>
       {products ? (
         <Container>
           <div className="imgBox">
-            <img src={products.img} alt={products.name} />
+            <img src={products.image} alt={products.title} />
           </div>
           <div className="desc">
-            <h2>{products.name}</h2>
-            <p>\{products.price}KRW</p>
+            <h2>
+              {" "}
+              {products.title.replace(
+                /배송|국내|해외|당일|<b>|휴먼|메이드|<\/b>|[a-z]|[A-Z]|[0-9]|일본|-/g,
+                ""
+              )}
+            </h2>
+            <h2>{products.lprice}KRW</h2>
 
             <div className="selectBox">
               <p className="size">
@@ -101,7 +116,7 @@ const Products = () => {
               </p>
             </div>
             <button>ADD TO CART</button>
-            <p>{products.desc}</p>
+            {/* <p>{products.desc}</p> */}
           </div>
         </Container>
       ) : (
