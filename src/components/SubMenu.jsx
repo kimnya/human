@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import { CtxState } from "../context/HumanCtxprovider";
@@ -8,16 +8,10 @@ const SubNav = styled.div`
   position: absolute;
   z-index: 300;
   left: 50%;
-  top: 20px;
   width: 99vw;
   height: 300px;
   background-color: #fff;
   transform: translate(-50%, 0);
-
-  &.footNav {
-    display: block;
-    top: 0;
-  }
 `;
 
 const LnbContainer = styled.div`

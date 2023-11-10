@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
-import { CtxData, CtxState } from "../context/HumanCtxprovider";
+import { CtxData } from "../context/HumanCtxprovider";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 const List = styled.ul`
   display: flex;
+  flex-flow: row wrap;
   justify-content: center;
-  width: 95%;
+  width: 100%;
   margin: 10px auto 0;
 `;
 

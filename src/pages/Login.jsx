@@ -1,10 +1,7 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
-import HumanCtxprovider, {
-  CtxDispatch,
-  CtxState,
-} from "../context/HumanCtxprovider";
+import { CtxState } from "../context/HumanCtxprovider";
 
 const LoginContainer = styled.div`
   position: absolute;
@@ -64,7 +61,7 @@ const Logout = styled.button`
 
 const Login = () => {
   const state = useContext(CtxState);
-  const navigate = useNavigate();
+
   const [input, setInput] = useState({
     logEmail: "",
     logPsw: "",

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { CtxDispatch, CtxState } from "../context/HumanCtxprovider";
+import { CtxDispatch } from "../context/HumanCtxprovider";
 import { useNavigate } from "react-router-dom";
 
 const Search = styled.div`
@@ -56,14 +56,14 @@ const SearchIcon = ({ searchOffFn }) => {
 
   const keywordFn = (evt) => {
     evt.preventDefault();
-    setKeyward("");
+
     dispatch({ type: "KEYWORD", data: { keyword } });
     navigate("/search");
   };
 
   const keywordFnEnter = (evt) => {
     evt.preventDefault();
-    if (evt.key == 13) {
+    if (evt.which === 13) {
       keywordFn();
     }
   };

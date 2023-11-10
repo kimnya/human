@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useContext } from "react";
+import React, { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { CtxState } from "../context/HumanCtxprovider";
 
 const LoginContainer = styled.div`
   display: flex;

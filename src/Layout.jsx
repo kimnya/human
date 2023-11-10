@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import styled, { createGlobalStyle } from "styled-components";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import title from "./asset/title.png";
@@ -7,11 +7,9 @@ import HumanCtxprovider, {
   CtxDispatch,
   CtxState,
 } from "./context/HumanCtxprovider";
-import Home from "./pages/Home";
-import { useEffect } from "react";
 import SubMenu from "./components/SubMenu";
 import SearchIcon from "./components/SearchIcon";
-import axios from "axios";
+import Top from "./components/Top";
 
 const GlobalStyle = createGlobalStyle`
 
@@ -261,17 +259,12 @@ const Shadow = styled.div`
 
 const Footer = styled.footer`
   position: relative;
-  > div {
-    width: 50%;
-    display: block;
-    position: absolute;
-    left: 50%;
-    background-color: #fff;
-    transform: translate(-50%, 0);
-  }
+  height: 377px;
 `;
 const SecondLogo = styled.div`
-  top: 300px;
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
   width: 207px;
   height: 37px;
   background-image: url(${title2});
@@ -295,9 +288,10 @@ const Layout = () => {
   const shopOutFn = () => {
     dispatch({ type: "OFFSHOW" });
   };
-
   const homeFn = () => {
     navigate("/");
+    // dispatch({ type: "PAGECHANGE" });
+    // alert("keyword=" + keyword);
   };
   const loginFn = () => {
     navigate("/account/login");
@@ -317,7 +311,7 @@ const Layout = () => {
         <DivContianer>
           <Header>
             <User>
-              <i class="far fa-user" onClick={loginFn}></i>
+              <i className="far fa-user" onClick={loginFn}></i>
               <Selection>
                 <option>한국어</option>
                 <option>English</option>
@@ -337,7 +331,7 @@ const Layout = () => {
             </Nav>
 
             <Menu>
-              <i class="fas fa-search" onClick={searchFn}>
+              <i className="fas fa-search" onClick={searchFn}>
                 {search ? <SearchIcon searchOffFn={searchOffFn} /> : null}
                 {/* 굳이 SearchIcon 컴포넌트에 i태그를 넣어놓고 search데이터값을 props로 넘기느니 이 방법이 코드가 간편하다.   */}
               </i>
@@ -354,45 +348,11 @@ const Layout = () => {
           </Section>
 
           <Footer>
-            <SubMenu className="footNav" />
-            {/* <SubNav className="ect">
-              <LnbContainer>
-                <Lnb>
-                  <li>뉴스레터 등록</li>
+            <SubMenu />
 
-                  <li>HUMAN MADE 취급점포</li>
-
-                  <li>이용약관</li>
-
-                  <li>
-                    배송지 :
-                    <Selection>
-                      <option>대한민국</option>
-                      <option>일본</option>
-                      <option>중국</option>
-                    </Selection>
-                  </li>
-                </Lnb>
-                <Lnb>
-                  <li>배송방법 *우송료에 대해</li>
-
-                  <li>지불방법에 대해</li>
-
-                  <li>개인정보취급방침</li>
-
-                  <li>위조품*모방품 방지 대책에 관하여 </li>
-                </Lnb>
-                <Lnb>
-                  <li>FAQ</li>
-
-                  <li>각종문의</li>
-
-                  <li>특정 상거래법에 근거한 표기 </li>
-                </Lnb>
-              </LnbContainer>
-            </SubNav> */}
             <SecondLogo className="logo" />
           </Footer>
+          <Top />
         </DivContianer>
       </HumanCtxprovider>
     </>

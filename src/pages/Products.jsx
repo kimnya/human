@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { useParams } from "react-router-dom";
-import { CtxData, CtxState } from "../context/HumanCtxprovider";
+import { CtxData } from "../context/HumanCtxprovider";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -78,7 +78,7 @@ const Products = () => {
 
   // 출처: https://think0wise.tistory.com/6
   //  벨로퍼트님의 react-router-dom 예제로 풀어보려 했으나 배열안에 있는 객체의 값을 prams로 지정하는 방법을 몰라서(이거 때문이 아닐수 있다.) 해결하지 못함
-  // 방법을 찾다가 배열의 index가 달라져도 배열안에 객채의 id값과 usePrams() 파라미터 값이 일치할때 return 해주는 로직을 발견 해결했다.
+  // 방법을 찾다가 배열의 index가 달라져도 배열안에 객채의 id값과 usePrams() 파라미터 값이 일치할때 return 해주는 로직을 발견 해결했다. .find()를 써야한다.
   return (
     <>
       {products ? (
@@ -120,7 +120,7 @@ const Products = () => {
           </div>
         </Container>
       ) : (
-        <p>존재하지 않는 프로필입니다.</p>
+        <p>존재하지 않는 상품입니다.</p>
       )}
     </>
   );

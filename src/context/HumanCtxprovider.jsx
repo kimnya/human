@@ -1,88 +1,72 @@
-import axios from "axios";
 import React, { createContext, useEffect, useReducer, useState } from "react";
+import { initialData, reducer } from "../reducer/humanmadeRducer";
+import axios from "axios";
 
-const initialData = {
-  show: false,
-  search: false,
-  isLogin: false,
-  keyword: null,
-
-  subMenu1: [
-    { name: "모든 아이템" },
-    { name: "신상품" },
-    { name: "아우터" },
-    { name: "셔츠" },
-    { name: "티셔츠" },
-    { name: "니트 커트소" },
-  ],
-  subMenu2: [
-    { name: "하의" },
-    { name: "신발" },
-    { name: "모자" },
-    { name: "가방 & 파우치" },
-    { name: "액세서리" },
-    { name: "이너웨어" },
-  ],
-  subMenu3: [
-    { name: "홈 & 라이프 스타일" },
-    { name: "협업 아이템" },
-    { name: "wasted Youth" },
-    { name: "CACTUS PLANT FLEA MARKET" },
-  ],
-};
 export const CtxState = createContext(null);
 export const CtxDispatch = createContext(null);
 export const CtxData = createContext(null);
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "SHOW":
-      return { ...state, show: !state.show };
-    case "OFFSHOW":
-      return { ...state, show: !state.show };
-    case "SEARCH":
-      return { ...state, search: !state.search };
-    case "KEYWORD":
-      return {
-        ...state,
-        keyword: action.data.keyword,
-        search: !state.search,
-      };
-
-    case "OFFSEARCH":
-      return { ...state, search: !state.search };
-    default:
-      return state;
-  }
-};
 const HumanCtxprovider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialData);
 
+  const { keyword } = state;
+
   const [data, setData] = useState([]);
+
+  // 예외처리를 위해 사용하는 try-catch 구문을 사용하여 내가 원하는 상황에 맞게 API호출을 보내는 로직을 만들었다.
+  //이로인해 다른 부분(ItemList컴포넌트,SearchPage)을 손대지 않고도 손쉽게 검색 기능을 구현할 수 있었다.
+  // 하지만 axios만으로 검색기능을 구현할 수 없었고 useEffect에서 의존배열에 keyword값이 수정될때마다  api호출을 하도록 만들었더니 성공했다.
+
+  // Router로 Home컴포넌트로 옮겨갈때 검색키워드를 초기화 시키고 싶은데 작동되지 않는다.
+  // mount과정에서 if문이 실행됐다가 0.1초만에 밑에 구문이 실행된다. (새로고침해보면 알수 있음) 어디서 조건이 변하고있는건지..
+
   const naverApi = async () => {
-    await axios
-      .get("/api/v1/search/shop.json", {
-        params: {
-          query: "휴먼메이드",
-          display: 5,
-        },
-        headers: {
-          "X-Naver-Client-Id": process.env.REACT_APP_NAVER_CLIENT_ID,
-          "X-Naver-Client-Secret": process.env.REACT_APP_NAVER_CLIENT_SECRET,
-        },
-      })
-      .then((res) => setData(res.data.items))
-      .catch((e) => {});
+    try {
+      if (keyword !== "") {
+        await axios
+          .get("/api/v1/search/shop.json", {
+            params: {
+              query: "휴먼메이드" + keyword,
+              display: 20,
+            },
+
+            headers: {
+              "X-Naver-Client-Id": process.env.REACT_APP_NAVER_CLIENT_ID,
+              "X-Naver-Client-Secret":
+                process.env.REACT_APP_NAVER_CLIENT_SECRET,
+            },
+          })
+          .then((res) => {
+            setData(res.data.items);
+          });
+      }
+      if (keyword === "") {
+        await axios
+          .get("/api/v1/search/shop.json", {
+            params: {
+              query: "휴먼메이드",
+              display: 20,
+            },
+
+            headers: {
+              "X-Naver-Client-Id": process.env.REACT_APP_NAVER_CLIENT_ID,
+              "X-Naver-Client-Secret":
+                process.env.REACT_APP_NAVER_CLIENT_SECRET,
+            },
+          })
+
+          .then((res) => {
+            setData(res.data.items);
+          });
+      }
+    } catch (error) {
+      alert("error");
+    }
   };
 
   useEffect(() => {
     naverApi();
-  }, []);
-  console.log(data);
-  // 출처 : https://yrnana.dev/post/2021-08-21-context-api-redux/
-  //   일반적으로 리액트 데이터는 부모로부터 자식으로 props를 통해 탑-다운으로 전달되는데, 이 단계가 너무 많아진다거나 전달을 여러곳에 해줘야하는 경우에 전역 스토어에 데이터를 저장하고 이를 데이터가 필요한 컴포넌트에 따로 공유할 수 있다.
-  // 어떤 데이터를 전역/로컬에 저장할 것인지는 개발자가 선택해야한다. 몇단계만 전달하면 되거나 굳이 전역으로 관리할 필요 없는 데이터를 전역 스토어에 넣는 것은 코드의 관리 측면에서도 좋지 않다.
-  // 이 말대로  다시 리팩토링할 데이터들이 보임
+  }, [keyword]);
 
   return (
     <>
