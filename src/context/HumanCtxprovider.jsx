@@ -11,7 +11,7 @@ const HumanCtxprovider = ({ children }) => {
 
   const { keyword } = state;
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
 
   // 예외처리를 위해 사용하는 try-catch 구문을 사용하여 내가 원하는 상황에 맞게 API호출을 보내는 로직을 만들었다.
   //이로인해 다른 부분(ItemList컴포넌트,SearchPage)을 손대지 않고도 손쉽게 검색 기능을 구현할 수 있었다.
@@ -67,7 +67,9 @@ const HumanCtxprovider = ({ children }) => {
   useEffect(() => {
     naverApi();
   }, [keyword]);
-
+  {
+    console.log(data);
+  }
   return (
     <>
       <CtxData.Provider value={data}>

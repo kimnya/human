@@ -73,9 +73,10 @@ const ItemList = () => {
   return (
     <>
       <List>
-        {data.map((item) => {
-          return <Items key={item.productId} item={item} />;
-        })}
+        {data &&
+          data.map((item) => {
+            return <Items key={item.productId} item={item} />;
+          })}
       </List>
     </>
   );
