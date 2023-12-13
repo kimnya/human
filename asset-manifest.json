@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/kimnya/human.git/static/js/main.aa19bd56.js",
-    "static/media/bgi.png": "/kimnya/human.git/static/media/bgi.2d25d10de4478c25d4c1.png",
-    "index.html": "/kimnya/human.git/index.html",
-    "main.aa19bd56.js.map": "/kimnya/human.git/static/js/main.aa19bd56.js.map"
+    "main.js": "/human/static/js/main.ee412a8e.js",
+    "static/media/bgi.png": "/human/static/media/bgi.2d25d10de4478c25d4c1.png",
+    "index.html": "/human/index.html",
+    "main.ee412a8e.js.map": "/human/static/js/main.ee412a8e.js.map"
   },
   "entrypoints": [
-    "static/js/main.aa19bd56.js"
+    "static/js/main.ee412a8e.js"
   ]
 }
