@@ -40,7 +40,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://github.com/kimnya/human.git",
+  "homepage": "https://kimnya.github.io/human/",
   "devDependencies": {
     "@babel/eslint-parser": "^7.22.15",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
