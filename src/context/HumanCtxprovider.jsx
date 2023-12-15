@@ -69,6 +69,8 @@ const HumanCtxprovider = ({ children }) => {
   }, [keyword]);
   {
     console.log(data);
+
+    console.log(10 % 1);
   }
   return (
     <>
